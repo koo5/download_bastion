@@ -55,7 +55,7 @@ def fetch_file_with_pycurl0(url, max_redirects=3):
 	if filename is None:
 		filename = "file.txt"
 	filename = clean_filename(filename)
-	return result.decode('utf-8'), filename=filename
+	return result.decode('utf-8'), filename
 
 
 def fetch_file_with_pycurl(url, max_redirects=3):
