@@ -22,24 +22,30 @@ async def root():
 	return {"message": "Hello World"}
 
 
-
-@app.get("/get0")
-async def get0(url: str):
+@app.get("/get_into_dir")
+async def get_into_dir(url: str, dir: str):
 	log.info(f"get {url=}")
-	result,filename = fetch_file_with_pycurl(url)
-	if filename is None:
-		filename = "file.txt"
-	filename = clean_filename(filename)
-	return dict(content=result.decode('utf-8'), filename=filename)
+	try:
+		result,filename = fetch_file_with_pycurl0(url)
+	except Exception as e:
+		return dict(error=str(e))
+	
+	d = Path(dir)
+	d.mkdir(parents=True, exist_ok=True)
+	f = d / filename
+	while f.exists():
+		f = f + "_2"
+	
+	f.write_text(result)
+	return dict(filename=f)
 
 
 @app.get("/get")
 async def get(url: str):
 	log.info(f"get {url=}")
 	try:
-		result,filename = fetch_file_with_pycurl(url)
+		result,filename = fetch_file_with_pycurl0(url)
 		return dict(content=result, filename=filename)
-
 	except Exception as e:
 		return dict(error=str(e))
 
@@ -49,7 +55,7 @@ def fetch_file_with_pycurl0(url, max_redirects=3):
 	if filename is None:
 		filename = "file.txt"
 	filename = clean_filename(filename)
-	return result.decode('utf-8'), filename=filename
+	return result.decode('utf-8'), filename
 
 
 def fetch_file_with_pycurl(url, max_redirects=3):
