@@ -26,6 +26,12 @@ async def root():
 
 
 
+@app.get("/health")
+async def health():
+	return {"message": "Hello World"}
+
+
+
 @app.get("/get_into_dir")
 async def get_into_dir(url: str, dir: str, filename_blacklist: list = []):
 	log.info(f"get {url=}")
