@@ -10,11 +10,14 @@ import socket
 from fastapi import FastAPI
 
 
+
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
+
 app = FastAPI()
+
 
 
 @app.get("/")
@@ -22,9 +25,11 @@ async def root():
 	return {"message": "Hello World"}
 
 
+
 @app.get("/get_into_dir")
-async def get_into_dir(url: str, dir: str):
+async def get_into_dir(url: str, dir: str, filename_blacklist: list = []):
 	log.info(f"get {url=}")
+
 	try:
 		result,filename = fetch_file_with_pycurl0(url)
 	except Exception as e:
@@ -33,11 +38,14 @@ async def get_into_dir(url: str, dir: str):
 	d = Path(dir)
 	d.mkdir(parents=True, exist_ok=True)
 	f = d / filename
-	while f.exists():
-		f = f + "_2"
-	
+
+	while f.exists() or filename in filename_blacklist:
+		filename = filename + "_2"
+		f = d / filename
+
 	f.write_text(result)
 	return dict(filename=f)
+
 
 
 @app.get("/get")
