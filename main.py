@@ -2,6 +2,8 @@ import logging
 import unicodedata
 import string
 import re
+from pathlib import Path
+
 import pycurl
 from io import BytesIO
 import ipaddress
@@ -33,19 +35,22 @@ async def health():
 
 
 @app.get("/get_into_dir")
-async def get_into_dir(url: str, dir: str, filename_blacklist: list = []):
+async def get_into_dir(url: str, dir: str, filename_hint='file', disallowed_filenames=['.htaccess']):
 	log.info(f"get {url=}")
 
 	try:
 		result,filename = fetch_file_with_pycurl0(url)
 	except Exception as e:
 		return dict(error=str(e))
+
+	if filename is None:
+		filename = filename_hint
 	
 	d = Path(dir)
 	d.mkdir(parents=True, exist_ok=True)
 	f = d / filename
-
-	while f.exists() or filename in filename_blacklist:
+	
+	while f.exists() or filename in disallowed_filenames:
 		filename = filename + "_2"
 		f = d / filename
 
@@ -66,9 +71,8 @@ async def get(url: str):
 
 def fetch_file_with_pycurl0(url, max_redirects=3):
 	result, filename = fetch_file_with_pycurl(url)
-	if filename is None:
-		filename = "file.txt"
-	filename = clean_filename(filename)
+	if filename is not None:
+		filename = clean_filename(filename)
 	return result.decode('utf-8'), filename
 
 
