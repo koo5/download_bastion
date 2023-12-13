@@ -34,9 +34,18 @@ async def health():
 
 
 
+def correct_onedrive_url(url):
+	try:
+		return 'https://api.onedrive.com/v1.0/shares/s!'+re.search(r'https://1drv.ms/u/s\!(.*?)\?.*', url).group(1)+'/root/content'
+	except:
+		return url
+
+
 @app.get("/get_into_dir")
 async def get_into_dir(url: str, dir: str, filename_hint='file', disallowed_filenames=['.htaccess']):
 	log.info(f"get {url=}")
+
+	url = correct_onedrive_url(url)
 
 	try:
 		result,filename = fetch_file_with_pycurl0(url)
