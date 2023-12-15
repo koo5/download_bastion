@@ -41,8 +41,9 @@ def correct_onedrive_url(url):
 		return url
 
 
-@app.get("/get_into_dir")
-async def get_into_dir(url: str, dir: str, filename_hint='file', disallowed_filenames=['.htaccess']):
+@app.get("/get_file_from_url_into_dir")
+async def get_file_from_url_into_dir(url: str, dir: str, filename_hint='file', disallowed_filenames=['.htaccess']):
+
 	log.info(f"get {url=}")
 
 	url = correct_onedrive_url(url)
@@ -64,7 +65,7 @@ async def get_into_dir(url: str, dir: str, filename_hint='file', disallowed_file
 		f = d / filename
 
 	f.write_text(result)
-	return dict(filename=f)
+	return dict(result={filepath:f, filename:filename})
 
 
 
