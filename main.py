@@ -65,7 +65,7 @@ async def get_file_from_url_into_dir(url: str, dir: str, filename_hint='file', d
 		f = d / filename
 
 	f.write_text(result)
-	return dict(result={filepath:f, filename:filename})
+	return dict(result={'filepath':f, 'filename':filename})
 
 
 
