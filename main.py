@@ -1,14 +1,4 @@
 import logging
-import unicodedata
-import string
-import re
-from pathlib import Path
-
-import pycurl
-from io import BytesIO
-import ipaddress
-from urllib.parse import urlparse, unquote
-import socket
 from fastapi import FastAPI
 import os, sys
 sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '../../common/libs/misc')))
