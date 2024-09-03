@@ -1,11 +1,11 @@
 #!/usr/bin/env fish
 
-function _; or status --is-interactive; or exit 1; end
+function e; or status --is-interactive; or exit 1; end
 
-virtualenv -p /usr/bin/python3.10 venv ;_
-. ./venv/bin/activate.fish ;_
+virtualenv -p /usr/bin/python3 venv ;e
+. ./venv/bin/activate.fish ;e
 
-python3 -m pip install --no-cache-dir -r requirements-dev.txt ;_
-python3 -m pip install --no-cache-dir -e ../workers ;_
+python3 -m pip install --no-cache-dir -r requirements-dev.txt ;e
+python3 -m pip install --no-cache-dir -e ../workers ;e
 
 pip install -e ../common/libs/remoulade/[rabbitmq,redis,postgres]
