@@ -1,5 +1,5 @@
 fastapi==0.99.1
 pycurl==7.45.2
-requests==2.31.0
+requests==2.32.4
 uvicorn[standard]==0.22.0
 watchdog
