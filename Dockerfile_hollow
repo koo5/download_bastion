@@ -10,9 +10,8 @@ ARG APPPATH
 USER myuser:myuser
 WORKDIR $APPPATH
 COPY $APPDIR/requirements.txt .
-COPY $APPDIR/requirements-dev.txt .
-RUN PYTHONUSERBASE=/home/myuser/.local python3 -m pip install --upgrade --ignore-installed --user --no-cache-dir -r requirements.txt
-RUN PYTHONUSERBASE=/home/myuser/.local python3 -m pip install --upgrade --ignore-installed --user --no-cache-dir -r requirements-dev.txt
+# requirements.txt is hash-pinned (regenerate with `pip-compile --generate-hashes`).
+RUN PYTHONUSERBASE=/home/myuser/.local python3 -m pip install --upgrade --ignore-installed --user --no-cache-dir --require-hashes -r requirements.txt
 USER root
 
 
@@ -24,7 +23,7 @@ USER root
 WORKDIR $APPPATH
 USER myuser
 CMD ["./start.sh"]
-ENV HC="curl http://127.0.0.1:6457/health" 
+ENV HC="curl --noproxy '*' http://127.0.0.1:6457/health"
 
 
 
