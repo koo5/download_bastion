@@ -1,5 +1,8 @@
-fastapi==0.99.1
+# pycurl pinned: tied to system libcurl ABI on the koo5/ubuntu base image.
+# others left loose so pip-compile picks current versions; bump cleared
+# fastapi/requests/starlette/uvicorn CVEs from the 2026-04 audit.
+fastapi
 pycurl==7.45.2
-requests==2.31.0
-uvicorn[standard]==0.22.0
+requests
+uvicorn[standard]
 watchdog
